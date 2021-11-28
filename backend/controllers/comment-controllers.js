@@ -6,11 +6,15 @@ exports.createComment = (req, res, next) => {
         res.status(400).send({ message: "Cette requête ne peut être vide!" });
     }
 
+    let d = new Date();
+    let date = d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+    console.log(date)
+
     const comment = new comsModel({
         postid: req.body.postid,
         userid: req.body.userid,
         body: req.body.body,
-        date_coms: req.body.date_coms
+        date_coms: date,
     });
 
     comsModel.create(comment, (err, data) => {

@@ -1,0 +1,137 @@
+<template>
+    <div class="text-center">
+        <h1 class="h2" v-if="mode == 'login'">Connexion</h1>
+        <h1 class="h2" v-else>Inscription</h1>
+        <p v-if="mode == 'login'">Tu n'as pas encore de compte? <span class="ml-1 font-weight-bold text-info cursor-pointer" @click="switchToCreateAccount()"><u>Créer un compte</u></span></p>
+        <p v-else>Tu as déjà un compte?<span class="ml-1 font-weight-bold text-info cursor-pointer" @click="switchToLogin()"><u>Se connecter</u></span></p>
+        <div class="container rounded w-25 bg-dark">
+            <form action="#" class="py-3">
+                <div class="form-group">
+                    <label for="email" class="text-white">Adresse mail </label>
+                    <input v-model="email" type="email" name="email" id="email" class="w-100" placeholder="aaa@bbb.cc">
+                </div>
+                <div class="form-group" v-if="mode == 'create'">
+                    <label for="username" class="text-white">Pseudo </label>
+                    <input v-model="username" type="username" name="username" placeholder="Exemple: JeanxFred12" id="username" class="w-100">
+                </div>
+                <div class="form-group">
+                    <label for="password" class="text-white">Mot de passe </label>
+                    <input v-model="password" type="password" name="password" id="password" class="w-100">
+                </div>
+                <div class="form-group" v-if="mode == 'create'">
+                    <label for="password" class="text-white">Confirmer votre mot de passe </label>
+                    <input v-model="confirmPassword" type="password" name="c_password" id="c_password" class="w-100">
+                </div>
+                <div class="form-group text-white" v-if="mode == 'login' && status == 'error_login'"> 
+                    Adresse mail et/ou mot de passe incorrect
+                </div>
+                <div class="form-group text-white" v-if="mode == 'create' && status == 'error_create'"> 
+                    Adresse mail déjà utilisée
+                </div>
+
+                <div>
+                    <button @click.prevent="login" type="submit" aria-label="Se connecter" class="bg-danger rounded p-2 border-danger text-white" v-if="mode == 'login'">
+                        <span v-if="status == 'loading'">Connexion en cours..</span>
+                        <span v-else>Se connecter</span>
+                    </button>
+                    <button @click.prevent="createAccount" type="submit" aria-label="Se connecter" class="bg-danger rounded p-2 border-danger text-white" v-else>
+                        <span v-if="status == 'loading'">Création en cours</span>
+                        <span v-else>Créer mon compte</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</template>
+<script>
+import { mapState } from "vuex"
+import { mapMutations } from "vuex"
+import http from "../http"
+
+export default{
+    name: 'login',
+    data: function() {
+        return {
+            mode: 'login',
+            email: '',
+            password: '',
+            username: '',
+            confirmPassword: '',
+        }
+    },
+    computed: {
+        ...mapState(['status']),
+    },
+    mounted: function () {
+        if(this.$store.state.user.id != 0) {
+            this.$router.push('/accueil')
+            return;
+        }
+        console.log(this.$store.state.user.id)
+    },
+    methods: {
+        switchToCreateAccount: function() {
+            this.mode = 'create'
+        },
+        switchToLogin: function() {
+            this.mode = 'login'
+        },
+        ...mapMutations(['initUser']),
+
+        login: function() {
+            const payload = {
+                email: this.email,
+                password: this.password
+            }
+            http.post('/user/login', payload)
+                .then(res => {
+                    console.log(res.data)
+                    this.initUser(res.data)
+                    localStorage.setItem('token', res.data.token)
+                    // this.$router.push('accueil')
+                    setTimeout(() => { this.$router.push('accueil'); }, 100);
+                })
+                .catch(() => {
+                    console.log('Echec de la connexion')
+                    localStorage.removeItem('token')
+                    alert('Adresse mail ou mot de passe incorrect!')
+                })
+        },
+        createAccount: function() {
+
+            if(this.username.length <= 5) {
+                alert('Veuillez entrer un pseudo de plus de 4 caractères!')
+                return false
+            }
+            if(this.email.length <= 8) {
+                alert('Veuillez entrer un email valide!')
+                return false
+            }
+            if(this.password != this.confirmPassword) {
+                alert('Veuillez entrer le même mot de passe!')
+                return false
+            }
+
+            const payload = {
+                email: this.email,
+                password: this.password,
+                username: this.username
+            }
+            http.post('/user/signup', payload)
+                .then(() => {
+                    alert('Inscription reussite')
+                    this.login()
+                })
+                .catch(() => {
+                    console.log('Echec de la connexion!');
+                    alert("Echec de la connexion!")
+                })
+        }
+    }
+}
+</script>
+<style lang="scss">
+.cursor-pointer {
+    cursor: pointer;
+}
+</style>

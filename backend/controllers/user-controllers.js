@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const User = require('../models/user');
 const userModel = require('../models/user');
 require('dotenv').config();
 
@@ -43,7 +44,8 @@ exports.login = (req, res, next) => {
                         res.status(200).json({
                             username: result.username,
                             userid: result.id,
-                            token: token
+                            token: token,
+                            grade: result.grade
                         });
                     }                
                 })
@@ -51,6 +53,16 @@ exports.login = (req, res, next) => {
         }
     })
 };
+
+exports.getOneUser = (req, res, next) => {
+    User.findOneById(req.params.id, (err, result) => {
+        if (err) {
+            return res.status(404).send({ message: "Utilisateur non trouvé" })
+        } else {
+            res.status(200).send(result)
+        }
+    })
+}
 
 exports.deleteUser = (req, res, next) => {
     userModel.delete(req.params.id, (err, result) => {

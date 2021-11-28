@@ -15,7 +15,6 @@ Post.create = (newPost, result) => {
             return;
         }
 
-        console.log("Post crée: ", {id: res.id, ...newPost});
         result(null, {id: res.id, ...newPost});
     });
 };
@@ -33,14 +32,15 @@ Post.findById = (id, result) => {
 };
 
 Post.findAll = result => {
-    db.query("SELECT * FROM posts", (err, res) => {
+
+    //"SELECT * FROM posts ORDER BY id DESC"
+    let request = "SELECT Posts.body, Posts.image, Posts.date_post, Posts.userid, Posts.id, Users.username FROM Posts JOIN Users ON Users.id = Posts.userid ORDER BY Posts.id DESC"
+    db.query(request, (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(null, err);
             return;
         }
-
-        console.log("Posts: ", res);
         result(null, res);
     });
 };
@@ -58,7 +58,6 @@ Post.updateById = (id, post, result) => {
             return;
         }
 
-        console.log("Post mis à jour: ", {id: id, ...post});
         result(null, {id: id, ...post});
     });
 };
@@ -71,13 +70,15 @@ Post.delete = (id, result) => {
             return;
         }
 
-        console.log("post supprimé id:", id);
         result(null, res);
     });
 };
 
 Post.findAllReactions =  (postid, result) => {
-    db.query('SELECT * FROM reaction WHERE postid = ?', postid, (err, res) => {
+    let jifej = 'SELECT * FROM reaction WHERE postid = ?';
+    let test1 = "SELECT Reaction.postid, Reaction.id, COUNT(*) AS sumReaction FROM Reaction GROUP BY Reaction.postid, Reaction.id ORDER BY Reaction.postid DESC"
+    let reactionQuery = "SELECT Reaction.postid, Reaction.type, Reaction.userid, Reaction.id FROM Reaction JOIN Posts ON Reaction.postid = Posts.id ORDER BY Reaction.id DESC"
+    db.query(test1, postid, (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(err, null);
@@ -123,7 +124,7 @@ Post.deleteReaction = (id, result) => {
             return;
         }
 
-        console.log("post supprimé id:", id);
+        console.log("Reaction supprimé id:", id);
         result(null, res);
     });
 };

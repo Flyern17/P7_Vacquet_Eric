@@ -26,3 +26,5 @@ router.delete('/:id/comment/:id', auth,comsCtrl.deleteComment);
 
 
 module.exports = router;
+
+

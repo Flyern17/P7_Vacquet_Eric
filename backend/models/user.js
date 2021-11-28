@@ -34,11 +34,26 @@ User.findOneByEmail = (email, result) => {
             result(err, null);
             return;
         } else {
-            console.log("Utilisateur email: ", res[0]) 
+            console.log("Utilisateur avec l'email: ", res[0]) 
             result(null, res[0])
         }
     })
 };
+
+// Trouver un user via son id 
+
+User.findOneById = (id, result) => {
+    db.query(`SELECT * FROM Users WHERE id = ?`, id, (err, res) => {
+        if (err) {
+            console.log("error: " + err);
+            result(err, null);
+            return;
+        } else {
+            console.log("Utilisateur avec l'id: ", res) 
+            result(null, res)
+        }
+    })
+}
 
 // Suppression d'un user 
 

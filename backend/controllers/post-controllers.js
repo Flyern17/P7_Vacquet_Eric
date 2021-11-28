@@ -6,11 +6,14 @@ exports.createPost = (req, res, next) => {
         res.status(400).send({ message: "Cette requête ne peut être vide!" });
     }
 
+    let d = new Date();
+    let date = d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+
     const post = new postModel({
         userid: req.body.userid,
         body: req.body.body,
-        image: req.body.image,
-        date_post: req.body.date_post
+        image: req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null,
+        date_post: date,
     });
 
     postModel.create(post, (err, data) => {

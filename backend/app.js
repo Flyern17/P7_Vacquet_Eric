@@ -15,16 +15,6 @@ db.connect(function(err) {
     console.log('connected as id ' + db.threadId);
 });
 
-/*
-db.query(
-    'SHOW TABLES',
-    function(err, results, fields) {
-      console.log(results); // results contains rows returned by server
-      console.log(fields); // fields contains extra meta data about results, if available
-    }
-);
-*/
-
 const app = express();
 
 // Headers
