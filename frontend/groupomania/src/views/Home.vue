@@ -39,22 +39,22 @@ export default {
     showReactionOnMessage(tableReaction) {
       console.log(tableReaction)
       for (let a in this.messages) {
+        // On défini le compteur des réactions de chaque message à 0
         this.$set(this.messages[a], "totalReaction_1", 0);
         this.$set(this.messages[a], "totalReaction_2", 0);
 
         for (let b in tableReaction) {
-          if (tableReaction[b].type == 1) {
-            console.log("La reaction est 1")
-            console.log(tableReaction[b].type)
-          } else if (tableReaction[b].type == -1) {
-            console.log("La reaction est -1")
-            console.log(tableReaction[b].type)
+          // On regarde les réactions mises pour chaque message
+          if(tableReaction[b].postid == this.messages[a].id) {
+            if (tableReaction[b].type == 1) {
+              this.messages[a].totalReaction_1 += tableReaction[b].sumReaction;
+            } else if (tableReaction[b].type == -1) {
+              this.messages[a].totalReaction_2 += tableReaction[b].sumReaction;
+            }
           }
         }
       }
     },
-
-
 
     refresh() {
       http.get('/post/')

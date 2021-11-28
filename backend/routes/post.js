@@ -17,7 +17,6 @@ router.delete('/:id',auth, postCtrl.deletePost);
 
 router.get('/:id/reaction', auth, postCtrl.findAllReaction);
 router.post('/:id/reaction', auth, postCtrl.createReaction);
-router.put('/:id/reaction/:id',auth, postCtrl.updateReaction);
 
 // CRUD des fonctionnalités des commentaires 
 router.post('/:id/comment', auth, comsCtrl.createComment);

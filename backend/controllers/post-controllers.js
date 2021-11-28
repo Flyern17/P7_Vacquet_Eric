@@ -1,3 +1,4 @@
+const Post = require('../models/post');
 const postModel = require('../models/post');
 
 exports.createPost = (req, res, next) => {
@@ -94,44 +95,34 @@ exports.createReaction = (req, res) => {
     if (!req.body) {
         res.status(400).send({ message: "Cette requête ne peut être vide!" });
     }
-    console.log("b", res.status)
     const newReaction = {
         userid: req.body.userid,
         postid: req.body.postid,
         type: req.body.type
     };
+    console.log(newReaction)
 
-    console.log(newReaction);
-    // Fonctionne côté SQL mais pas côté backend
-    postModel.addReaction(newReaction, (err, result) => {
-        console.log(res.status)
-        if (err) {
-            res.status(400).send({ message: "Impossible d'ajouter la réaction !" })
+    Post.findReaction(newReaction, (err, data) => {
+        if (data.length == 0) {
+            Post.addReaction(newReaction, (err, data) => {
+                if(err) {
+                    return res.status(400).send({ message: "Impossible de créer cette réaction!" });
+                }
+                res.status(201).send(data);
+            });
         } else {
-            res.status(201).send(result)
+            Post.updateReaction(newReaction, (err, data) => {
+                if (err) {
+                    return res.status(400).send({ message: "Impossible de mettre à jour cette réaction!" });
+                }
+                res.status(201).send(data)
+            })
         }
-    });
+    })
+
+
+
+
 }
-
-exports.updateReaction = (req, res) => {
-    if (!req.body) {
-        res.status(400).send({ message: "Cette requête ne peut pas être vide!" });
-    }
-
-    const newReaction = {
-        userid: req.body.userid,
-        postid: req.body.postid,
-        type: req.body.type
-    }
-    console.log(newReaction);
-
-    postModel.updateReaction(newReaction, (err, result) => {
-        if (err) {
-            res.status(400).send({ message: "Modification de réaction échouée!" });
-        } else {
-            res.status(201).send(result)
-        }
-    });
-};
 
 

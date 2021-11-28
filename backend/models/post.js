@@ -75,9 +75,7 @@ Post.delete = (id, result) => {
 };
 
 Post.findAllReactions =  (postid, result) => {
-    let jifej = 'SELECT * FROM reaction WHERE postid = ?';
     let test1 = "SELECT Reaction.postid, Reaction.id, Reaction.type, COUNT(*) AS sumReaction FROM Reaction GROUP BY Reaction.postid, Reaction.id ORDER BY Reaction.postid DESC"
-    let reactionQuery = "SELECT Reaction.postid, Reaction.type, Reaction.userid, Reaction.id FROM Reaction JOIN Posts ON Reaction.postid = Posts.id ORDER BY Reaction.id DESC"
     db.query(test1, postid, (err, res) => {
         if (err) {
             console.log("error: ", err);
@@ -97,11 +95,30 @@ Post.addReaction = (newReaction, result) => {
             result(err, null);
             // return;
         } 
-        console.log(res)
+
         console.log("Reaction ajoutée:", {id: res.insertId, ...newReaction});
         result(null, {id: res.insertId, ...newReaction});
     });
 };
+
+Post.findReactionType = (id, result) => {
+    db.query("SELECT Reaction.type, Reaction.id FROM Reaction WHERE id = ?", id, (err, res) => {
+        if (err) {
+            result(err, null);
+        }
+        result(null, res);
+    })
+};
+
+Post.findReaction = (reaction, result) => {
+    db.query(`SELECT * FROM Reaction WHERE postid = ? AND userid = ?`, [reaction.postid, reaction.userid], (err, res) => {
+        if (err) {
+            result(err, null);
+        } else {
+            result(null, res);
+        }
+    })
+}
 
 Post.updateReaction = (newReaction, result) => {
     db.query('UPDATE reaction SET type= ? WHERE postid = ? AND userid = ?', [newReaction.type, newReaction.postid, newReaction.userid], (err, res) => {
@@ -115,18 +132,5 @@ Post.updateReaction = (newReaction, result) => {
         }
     });
 }
-
-Post.deleteReaction = (id, result) => {
-    db.query(`DELETE FROM posts WHERE id = ${id}`, (err, res) => {
-        if (err) {
-            console.log("error: ", err);
-            result(err, null);
-            return;
-        }
-
-        console.log("Reaction supprimé id:", id);
-        result(null, res);
-    });
-};
 
 module.exports = Post;

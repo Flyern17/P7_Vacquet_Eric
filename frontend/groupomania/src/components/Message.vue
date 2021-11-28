@@ -82,8 +82,9 @@ export default {
             const payload = {
                 userid: this.user.id,
                 postid: this.item.id,
-                type: reactionId
+                type: reactionId,
             }
+
             console.log(payload)
             http.post(`/post/${this.item.id}/reaction`, payload) 
             .then(() => {
