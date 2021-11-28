@@ -76,7 +76,7 @@ Post.delete = (id, result) => {
 
 Post.findAllReactions =  (postid, result) => {
     let jifej = 'SELECT * FROM reaction WHERE postid = ?';
-    let test1 = "SELECT Reaction.postid, Reaction.id, COUNT(*) AS sumReaction FROM Reaction GROUP BY Reaction.postid, Reaction.id ORDER BY Reaction.postid DESC"
+    let test1 = "SELECT Reaction.postid, Reaction.id, Reaction.type, COUNT(*) AS sumReaction FROM Reaction GROUP BY Reaction.postid, Reaction.id ORDER BY Reaction.postid DESC"
     let reactionQuery = "SELECT Reaction.postid, Reaction.type, Reaction.userid, Reaction.id FROM Reaction JOIN Posts ON Reaction.postid = Posts.id ORDER BY Reaction.id DESC"
     db.query(test1, postid, (err, res) => {
         if (err) {

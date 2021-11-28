@@ -36,8 +36,22 @@ export default {
     this.refresh()
   },
   methods: {
-    updateReactionOnMessage(tabReaction) {
-      console.log(tabReaction)
+    showReactionOnMessage(tableReaction) {
+      console.log(tableReaction)
+      for (let a in this.messages) {
+        this.$set(this.messages[a], "totalReaction_1", 0);
+        this.$set(this.messages[a], "totalReaction_2", 0);
+
+        for (let b in tableReaction) {
+          if (tableReaction[b].type == 1) {
+            console.log("La reaction est 1")
+            console.log(tableReaction[b].type)
+          } else if (tableReaction[b].type == -1) {
+            console.log("La reaction est -1")
+            console.log(tableReaction[b].type)
+          }
+        }
+      }
     },
 
 
@@ -48,7 +62,7 @@ export default {
           this.messages = res.data;
           http.get(`/post/${this.message_id}/reaction`)
           .then(res => {
-            this.updateReactionOnMessage(res.data)
+            this.showReactionOnMessage(res.data);
           })
         })
     },
