@@ -37,19 +37,7 @@ export default {
   },
   methods: {
     updateReactionOnMessage(tabReaction) {
-      for (let i in this.messages) {
-        this.$set(this.messages[i], "totalReaction_1", 0);
-        this.$set(this.messages[i], "totalReaction_2", 0);
-
-        for(let j in tabReaction) {
-          if(tabReaction[j].message_id == this.messages[i].id){
-            switch(tabReaction[j].reaction_id){
-              case 1 : this.messages[i].totalReaction_1 = tabReaction[j].sumReaction; break
-              case 2 : this.messages[i].totalReaction_2 = tabReaction[j].sumReaction; break
-            }
-          }
-        }
-      }
+      console.log(tabReaction)
     },
 
 
