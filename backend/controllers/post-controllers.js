@@ -1,8 +1,12 @@
 const Post = require('../models/post');
 const postModel = require('../models/post');
+const fs = require('fs');
+
+// Création d'un post
 
 exports.createPost = (req, res, next) => {
     // Validation de la requête
+    console.log(req.body)
     if (!req.body) {
         res.status(400).send({ message: "Cette requête ne peut être vide!" });
     }
@@ -24,6 +28,8 @@ exports.createPost = (req, res, next) => {
     })
 };
 
+// Trouver tout les posts existants
+
 exports.findAllPost = (req, res, next) => {
     postModel.findAll((err, data) => {
         if (err) {
@@ -33,6 +39,8 @@ exports.findAllPost = (req, res, next) => {
         }
     });
 };
+
+// Trouver un seul post
 
 exports.findOnePost = (req, res, next) => {
     postModel.findById(req.params.id, (err, data) => {
@@ -48,38 +56,35 @@ exports.findOnePost = (req, res, next) => {
     });
 };
 
-exports.updatePost = (req, res, next) => {
-    // Validation de la requête
-    if (!req.body) {
-        res.status(400).send({ message: "Cette requête ne peut pas être vide!" });
-    }
-
-    postModel.updateById(req.params.id, new postModel(req.body), (err, data) => {
-        if (err) {
-            if (err.kind === "not_found") {
-                res.status(404).send({ message: `Aucun post trouvé avec l'id: ${req.params.id}.` });
-            } else {
-                res.status(500).send({ message: "Erreur lors de la mise à jour du post:" + req.params.id });
-            }
-        } else {
-            res.status(200).send(data);
-        }
-    });
-};
+// Supprimer un post
 
 exports.deletePost = (req, res, next) => {
-    postModel.delete(req.params.id, (err, data) => {
-        if (err) {
-            if (err.kind === "not_found") {
-                res.status(404).send({ message: `Aucun post trouvé avec l'id ${req.params.id}` });
-            } else {
-                res.status(500).send({ message: "Suppression non autorisée de l'id " + req.params.id });
-            }
-        } else {
-            res.status(200).send({ message: "Le post a bien été supprimé." });
+    postModel.findById(req.params.id, (err, data) => {
+        console.log(data)
+        if(data.image) {
+            const filename = data.image.split('/images/')[1]
+            console.log(filename)
+            fs.unlink(`images/${filename}`, (err) => {
+                if(err) {
+                    res.status(500).send({ message : "Une erreur est arrivée lors de la suppression de l'image!" })
+                }
+            })
         }
-    });
+        postModel.delete(req.params.id, (err, data) => {
+            if (err) {
+                if (err.kind === "not_found") {
+                    res.status(404).send({ message: `Aucun post trouvé avec l'id ${req.params.id}` });
+                } else {
+                    res.status(500).send({ message: "Suppression non autorisée de l'id " + req.params.id });
+                }
+            } else {
+                res.status(200).send({ message: "Le post a bien été supprimé." });
+            }
+        });
+    })
 };
+
+// Trouver toutes les reactions
 
 exports.findAllReaction = (req, res) => {
     postModel.findAllReactions(req.params.id, (err, result) => {
@@ -90,6 +95,8 @@ exports.findAllReaction = (req, res) => {
         }
     })
 };
+
+// Ajouter une reaction
 
 exports.createReaction = (req, res) => {
     if (!req.body) {
@@ -119,10 +126,6 @@ exports.createReaction = (req, res) => {
             })
         }
     })
-
-
-
-
 }
 
 

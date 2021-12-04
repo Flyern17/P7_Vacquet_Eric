@@ -1,10 +1,18 @@
 const express = require('express');
+const helmet = require('helmet');
 const mysql = require('mysql2');
 const db = require('./models/db');
+const rateLimit = require('express-rate-limit');
 const path = require('path');
 
 const postRoutes = require('./routes/post');
 const userRoutes = require('./routes/user');
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 10, // Nombre de requetes possibles pour chaque adresse IP
+    message: "Nombre de requêtes dépassés, re-tentez dans 15m"
+});
 
 db.connect(function(err) {
     if (err) {
@@ -16,6 +24,8 @@ db.connect(function(err) {
 });
 
 const app = express();
+
+app.use(helmet());
 
 // Headers
 
@@ -34,7 +44,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Routes
 
-app.use('/api/user', userRoutes);
+app.use('/api/user', limiter, userRoutes);
 app.use('/api/post', postRoutes);
 
 module.exports = app;

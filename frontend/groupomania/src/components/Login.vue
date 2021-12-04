@@ -4,7 +4,7 @@
         <h1 class="h2" v-else>Inscription</h1>
         <p v-if="mode == 'login'">Tu n'as pas encore de compte? <span class="ml-1 font-weight-bold text-info cursor-pointer" @click="switchToCreateAccount()"><u>Créer un compte</u></span></p>
         <p v-else>Tu as déjà un compte?<span class="ml-1 font-weight-bold text-info cursor-pointer" @click="switchToLogin()"><u>Se connecter</u></span></p>
-        <div class="container rounded w-25 bg-dark">
+        <div class="m-auto rounded col-lg-4 col-md-6 col-sm-12 bg-dark">
             <form action="#" class="py-3">
                 <div class="form-group">
                     <label for="email" class="text-white">Adresse mail </label>

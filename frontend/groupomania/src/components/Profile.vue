@@ -2,7 +2,7 @@
     <div class="h4 mt-5 container bg-dark text-white rounded-1rem">
         <p class="mb-3 pt-3 text-decoration-underline">Mes informations personnelles</p>
         <div class="pb-2 w-100">
-            <div class="border rounded px-2 pt-2 mb-3">
+            <div class="px-2 pt-2 mb-3">
                 <p class="w-100">Pseudo: {{ member.username }}</p>
                 <p class="w-100">Email: {{ member.email }}</p>
                 <p class="w-100">Grade: {{ userGrade() }}</p>

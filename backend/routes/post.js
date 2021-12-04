@@ -10,7 +10,6 @@ const comsCtrl = require('../controllers/comment-controllers');
 router.get('/', auth, postCtrl.findAllPost);
 router.get('/:id', auth, postCtrl.findOnePost)
 router.post('/', auth, multer, postCtrl.createPost);
-router.put('/:id', auth, multer, postCtrl.updatePost);
 router.delete('/:id',auth, postCtrl.deletePost);
 
 // Systeme de like / dislike 

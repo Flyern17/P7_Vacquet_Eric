@@ -9,6 +9,7 @@ const User = function(user) {
     this.lastname = user.lastname,
     this.job = user.job,
     this.birthdate = user.birthdate
+    this.isActive = !!user.isActive
 }
 
 // Création d'un user
@@ -28,7 +29,7 @@ User.create = (newUser, result) => {
 // Inspection du user
 
 User.findOneByEmail = (email, result) => {
-    db.query("SELECT * FROM Users WHERE email = ?", email, (err, res) => {
+    db.query("SELECT * FROM Users WHERE email = ? AND isActive=true", email, (err, res) => {
         if (err) {
             console.log("error: " + err);
             result(err, null);
@@ -43,7 +44,7 @@ User.findOneByEmail = (email, result) => {
 // Trouver un user via son id 
 
 User.findOneById = (id, result) => {
-    db.query(`SELECT * FROM Users WHERE id = ?`, id, (err, res) => {
+    db.query(`SELECT * FROM Users WHERE id = ? AND isActive=true`, id, (err, res) => {
         if (err) {
             console.log("error: " + err);
             result(err, null);
@@ -57,8 +58,8 @@ User.findOneById = (id, result) => {
 
 // Suppression d'un user 
 
-User.delete = (id, result) => {
-    db.query(`DELETE FROM users WHERE id = ${id}`, (err, res) => {
+User.delete = (id, result) => {;
+    db.query(`UPDATE users SET isActive=false WHERE id = ${id}`, (err, res) => {
         if (err) {
             console.log("error: " + err);
             result(err, null);
@@ -71,7 +72,7 @@ User.delete = (id, result) => {
 }
 
 User.update = (id, user, result) => {
-    db.query("UPDATE users SET firstname = ?, lastname = ?, job = ?, birthdate = ? WHERE id = ?", [user.firstname, user.lastname, user.job, user.birthdate, id], (err, res) => {
+    db.query("UPDATE users SET firstname = ?, lastname = ?, job = ?, birthdate = ? WHERE id = ? AND isActive=true", [user.firstname, user.lastname, user.job, user.birthdate, id], (err, res) => {
         if (err) {
             console.log("error: " + err);
             result(err, null);

@@ -1,17 +1,17 @@
 <template>
-    <div class="container mt-5">
+    <div class="mt-5 col-sm-12 col-md-11 col-lg-10 mx-auto">
         <div class="bg-dark text-white rounded-1rem">
             <div>
-                <div class="mb-4 mx-5">
+                <div class="mb-4 mx-2">
                     <p class="mx-2 pt-3 mb-0 font-weight-bold">{{ item.username }}</p>
                     <span class="mx-2 text-decoration-underline">{{ item.date_post | moment("from", "now", true) }} ago</span>
                 </div>
             </div>
-            <div class="mx-5">
+            <div class="mx-2">
                 <p class="mx-2 text-dark font-weight-bold p-1 bg-white rounded">{{ item.body }}</p>
                 <img v-if="(item.image != null)" :src="item.image" alt="" class="mx-2 pb-2 w-50">
             </div>
-            <div class="my-3 mx-5">
+            <div class="my-3 mx-2">
                 <a @click.prevent="addReaction(1)" href="/#/accueil" class="button bg-danger rounded p-1 text-white m-2" aria-label="J'aime le message">
                     <span class="pr-2"><i class="far fa-thumbs-up"></i></span>
                     <span>{{item.totalReaction_1}}</span>
@@ -22,10 +22,9 @@
                 </a>
                 <button v-if="isGoodUser" type="button" aria-label="Supprimer un message" @click.prevent="deleteMessage()" class="bg-danger rounded border-danger text-white"><i class="fas fa-trash"></i></button>
             </div>
-            <div v-for="comment in comments" :key="comment.id" class="">
-                <Comment :comment="comment" class="p-2"></Comment>
-            </div>
-            <NewComment :message_id="item.id"></NewComment> 
+            
+            <Comment v-for="comment in comments" :key="comment.id" :comment="comment" @refresh="refresh" class="p-2"></Comment> 
+            <NewComment :message_id="item.id" @created="addComment"></NewComment> 
 
         </div>
     </div>
@@ -72,6 +71,10 @@ export default {
         this.refresh()
     },
     methods: {
+
+        addComment(data){
+            this.comments.unshift(data)
+        },
         refresh() {
             http.get(`/post/${this.item.id}/comment/`)
                 .then(res => {
@@ -88,7 +91,7 @@ export default {
             console.log(payload)
             http.post(`/post/${this.item.id}/reaction`, payload) 
             .then(() => {
-                this.refresh()
+                this.$emit('refresh')
             // setTimeout(() => { this.$router.push('accueil'); }, 100);
             })
             .catch(() => {
@@ -100,7 +103,7 @@ export default {
             http.delete(`/post/${this.item.id}`)
             .then(() => {
                 alert('Le message a bien été supprimé!');
-                this.refresh();
+                this.$emit('refresh');
             })
         },
     }

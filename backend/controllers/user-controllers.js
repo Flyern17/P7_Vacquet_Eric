@@ -12,6 +12,7 @@ exports.signup = (req, res, next) => {
                 password: hash,
                 email: req.body.email,
                 grade: 1,
+                isActive: true,
             });
             console.log(user);
 

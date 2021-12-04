@@ -7,6 +7,8 @@ const Post = function(message) {
     this.date_post = message.date_post
 } 
 
+// Creer un post
+
 Post.create = (newPost, result) => {
     db.query("INSERT INTO posts SET ?", newPost, (err, res) => {
         if (err) {
@@ -19,6 +21,8 @@ Post.create = (newPost, result) => {
     });
 };
 
+// Trouver un post grâce à son ID 
+
 Post.findById = (id, result) => {
     db.query(`SELECT * FROM posts WHERE id = ${id}`, (err, res) => {
         if (err) {
@@ -30,6 +34,8 @@ Post.findById = (id, result) => {
         result(null, res[0]);
     });
 };
+
+// Trouver tous les posts
 
 Post.findAll = result => {
 
@@ -45,22 +51,7 @@ Post.findAll = result => {
     });
 };
 
-Post.updateById = (id, post, result) => {
-    db.query("UPDATE posts SET body = ?, image = ? WHERE id = ?", [post.body, post.image, id], (err, res) => {
-        if (err) {
-            console.log("error: ", err);
-            result(null, err);
-            return;
-        }
-
-        if (res.affectedRows == 0) {
-            result({ kind: "not_found" }, null);
-            return;
-        }
-
-        result(null, {id: id, ...post});
-    });
-};
+// Supprimer un post grâce à son ID 
 
 Post.delete = (id, result) => {
     db.query(`DELETE FROM posts WHERE id = ${id}`, (err, res) => {
@@ -73,6 +64,8 @@ Post.delete = (id, result) => {
         result(null, res);
     });
 };
+
+// Trouver toutes les réactions
 
 Post.findAllReactions =  (postid, result) => {
     let test1 = "SELECT Reaction.postid, Reaction.id, Reaction.type, COUNT(*) AS sumReaction FROM Reaction GROUP BY Reaction.postid, Reaction.id ORDER BY Reaction.postid DESC"
@@ -88,6 +81,8 @@ Post.findAllReactions =  (postid, result) => {
     })
 };
 
+// Ajouter une réaction
+
 Post.addReaction = (newReaction, result) => {
     db.query('INSERT INTO reaction SET ?', newReaction, (err, res) => {
         if (err) {
@@ -101,6 +96,8 @@ Post.addReaction = (newReaction, result) => {
     });
 };
 
+// Trouver un type de réaction 
+
 Post.findReactionType = (id, result) => {
     db.query("SELECT Reaction.type, Reaction.id FROM Reaction WHERE id = ?", id, (err, res) => {
         if (err) {
@@ -109,6 +106,8 @@ Post.findReactionType = (id, result) => {
         result(null, res);
     })
 };
+
+// Trouver une réaction précise
 
 Post.findReaction = (reaction, result) => {
     db.query(`SELECT * FROM Reaction WHERE postid = ? AND userid = ?`, [reaction.postid, reaction.userid], (err, res) => {
@@ -119,6 +118,8 @@ Post.findReaction = (reaction, result) => {
         }
     })
 }
+
+// Modifier une réaction 
 
 Post.updateReaction = (newReaction, result) => {
     db.query('UPDATE reaction SET type= ? WHERE postid = ? AND userid = ?', [newReaction.type, newReaction.postid, newReaction.userid], (err, res) => {

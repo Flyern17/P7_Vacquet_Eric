@@ -1,6 +1,6 @@
 <template>
-    <div class="container">
-        <div class="bg-dark-dark mx-5 rounded-1rem pb-2">
+    <div class="">
+        <div class="bg-dark-dark mx-2 rounded-1rem pb-2">
             <p class="mx-3 pt-3 mb-0 font-weight-bold">{{ comment.username }}</p>
             <span class="mx-3 text-decoration-underline">{{ comment.date_coms | moment("from", "now", true) }} ago</span>
             <div class="d-flex my-2">

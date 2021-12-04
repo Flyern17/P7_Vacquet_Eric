@@ -1,12 +1,14 @@
 <template>
   <div class="">
-    <h1 class="h4 container">
-      Bienvenue
-      <span class="">{{ user.username }}</span>
-    </h1>
-    <new-message></new-message>
+    <div class="mx-3">
+      <h1 class="col-lg-10 col-md-11 col-sm-12 h4 mx-auto text-decoration-underline">
+        Bienvenue
+        <span class="font-weight-bolder text-danger">{{ user.username }}</span>
+      </h1>
+    </div>
+    <new-message @created="addPost"></new-message>
     <div v-for="message in messages" :key="message.id">
-      <message :item='message'></message>
+      <message :item='message' @refresh="refresh" @added="newComment"></message>
     </div>
   </div>
 </template>
@@ -56,6 +58,10 @@ export default {
       }
     },
 
+    addPost(data) {
+      this.messages.unshift(data)
+    },
+
     refresh() {
       http.get('/post/')
         .then(res => {
@@ -66,6 +72,10 @@ export default {
           })
         })
     },
+
+    newComment(data){
+      this.comments.unshift(data)
+    }
   }
 }
 

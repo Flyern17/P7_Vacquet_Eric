@@ -54,6 +54,7 @@ export default {
         this.refresh()
     },
     methods: {
+
         refresh() {
             const payload = {
                 id: this.user.id
@@ -69,6 +70,7 @@ export default {
                     console.log(error)
                 })
         },
+
         updateMember() {
             const payload = {
                 firstname: this.firstname,
@@ -87,6 +89,12 @@ export default {
                     alert("L'utilisateur n'a pas été mis à jour!")
                 })
         },
+
+        logout() {
+            this.$store.commit('logout');
+            window.location.href='/';
+        },
+
         deleteMember() {
             // Modifier le modele pour la suppression d'un compte
             const payload = {
@@ -96,6 +104,7 @@ export default {
             http.delete(`/user/delete/${this.user.id}`, payload)
                 .then(() => {
                     console.log('logout')
+                    this.logout();
                 })
                 .catch(() => {
                     alert("L'utilisateur n'a pas été supprimé!")

@@ -1,19 +1,19 @@
 <template>
-    <div class="h1 mt-5 container">
-        <h1 class="h4 col-3">Nouveau message</h1>
-        <div class="bg-dark text-white container rounded-1rem">
+    <div class="h1 mt-5 mx-3">
+        <h1 class="mx-auto col-lg-10 col-md-11 col-sm-12 h4">Nouveau message</h1>
+        <div class="mx-auto bg-dark text-white rounded-1rem col-lg-10 col-md-11 col-sm-12">
             <div class="h6 row">
                 <div class="col-12">
                     <a href="/#/profil" class="text-light row mx-3 font-weight-bold my-3">{{ user.username }}</a>
                     <form class="form-inline my-1">
-                        <div class="form-group col-11 flex inline-block">
+                        <div class="form-group col-12 flex inline-block">
                             <label for="newMessage" class=""></label>
                             <input v-model="body" type="newMessage" name="newMessage" placeholder="Que voulez-vous raconter aujourd'hui?" id="newMessage" class="w-100 py-1">
                         </div>
-                        <div class="form-group mx-3 my-3">
+                        <div class="form-group mx-3 my-md-3 my-sm-2">
                             <input type="file" class="" @change="uploadImage($event)" id="image-input" ref="imageInput" aria-label="Ajouter une image">
                         </div>
-                        <div class="form-group my-3">
+                        <div class="form-group my-lg-3 ml-3 my-sm-2">
                             <button type="button" aria-label="Poster un message" @click.prevent="postMessage" class="pull-right bg-danger rounded p-2 border-danger text-white">Envoyer le message</button>
                         </div>    
                     </form>
@@ -40,6 +40,10 @@ export default {
     },
     methods: {
         postMessage(){
+            if(this.body.trim() == '') {
+                alert('Impossible de poster un message vide!')
+                return
+            }
             if(this.file) { 
                 const formData = new FormData();
                 formData.append('body', this.body);
@@ -48,7 +52,7 @@ export default {
 
                 http.post('/post/', formData)
                 .then(res => {
-                    this.$emit('', res.data)
+                    this.$emit('created', res.data)
                     this.body = '',
                     this.file = ''    
                 })
@@ -62,7 +66,8 @@ export default {
                 }
                 http.post('/post/', payload)
                 .then(res => {
-                    this.$emit('', res.data)
+                    
+                    this.$emit('created', res.data)
                     this.body = ''
                 })
                 .catch(() => {
