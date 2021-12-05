@@ -39,20 +39,26 @@ export default {
         ...mapState(['user']),
     },
     methods: {
+        // Appel API sur le post d'un message
         postMessage(){
+            // On vérifie que le post est bien rempli, sinon, on envoie une erreur
             if(this.body.trim() == '') {
                 alert('Impossible de poster un message vide!')
                 return
             }
+            // Si il y'a une image enregistré dans les champs, on crée une constante formData ou on assignera les nouvelles valeurs des champs
             if(this.file) { 
                 const formData = new FormData();
                 formData.append('body', this.body);
                 formData.append('userid', this.user.id);
                 formData.append('file', this.file, this.file.name);
 
+                // On envoie formData dans la route post
                 http.post('/post/', formData)
                 .then(res => {
+                    // On actualise le composant message avec le nouveau message crée
                     this.$emit('created', res.data)
+                    // On remet une valeur '' aux champs utilisées
                     this.body = '',
                     this.file = ''    
                 })
@@ -60,14 +66,17 @@ export default {
                     alert('Impossible de poster ce message!');
                 }) 
             } else {
+                // Si il n'y a pas d'image, on enregistre une constante payload
                 const payload = {
                     body: this.body,
                     userid: this.user.id
                 }
+                // On ajoute le payload à la route
                 http.post('/post/', payload)
                 .then(res => {
-                    
+                    // On actualise le composant message avec le nouveau message crée
                     this.$emit('created', res.data)
+                    // On remet une valeur '' aux champs utilisées
                     this.body = ''
                 })
                 .catch(() => {

@@ -1,5 +1,5 @@
 const passwordValidator = require("password-validator");
-
+// Définition des conditions à respecter pour l'inscription du mot de passe.
 let passwordSchema = new passwordValidator();
 
 passwordSchema
@@ -11,6 +11,7 @@ passwordSchema
 .has().not().spaces()                           // Should not have spaces
 .is().not().oneOf(['Passw0rd', 'Password123']); // Blacklist these values
 
+// On vérifie si le mot de passe est conforme ou non
 module.exports = (req, res, next) => {
     if(!passwordSchema.validate(req.body.password)) {
         res.writeHead(400, 'Le mot de passe doit contenir entre 8 et 100 caractères, avoir une majuscule et contenir au moins 2 chiffres!');

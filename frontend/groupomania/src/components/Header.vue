@@ -1,6 +1,6 @@
 <template>
     <header>
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <nav class="navbar navbar-expand navbar-dark bg-dark">
             <div>
                 <a v-if="isConnected" class="navbar-brand mx-md-3" href="/#/accueil">
                     <img width="80" height="70" src="../assets/icon-left-font-monochrome-white.png" alt="logo groupomania">
@@ -9,11 +9,7 @@
                     <img width="80" height="70" src="../assets/icon-left-font-monochrome-white.png" alt="logo groupomania">
                 </a>
             </div>
-
-            <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-nav navbar-collapse collapse" id="navbarToggler">
+            <div class="navbar-nav navbar-collapse" id="navbarToggler">
                 <div class="navbar-nav mr-auto">
                     <router-link v-if="isConnected" to="/accueil" class="nav-link text-white">Accueil</router-link>
                     <router-link v-if="isConnected" to="/profil" class="nav-link text-white">Mon compte</router-link>
@@ -35,6 +31,7 @@ export default {
     },
     computed: {
         ...mapState(["user"]),
+        // On vérifie que l'utilisateur est bien connecté, sinon, nous n'affichons pas les différents liens du header (Et le bouton de deconnexion)
         isConnected(){
             if(this.user.id > 0) {
                 return true    
@@ -43,6 +40,7 @@ export default {
         }
     },
     methods: {
+        // On applique la fonction enregistrée dans le store 'logout'
         logout: function() {
             this.$store.commit('logout');
             window.location.href='/';

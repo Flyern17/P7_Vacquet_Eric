@@ -29,6 +29,7 @@ export default {
     },
     computed: {
         ...mapState(['user']),
+        // On vérifie si l'utilisateur est bien celui qui a crée le commentaire (Ou qu'il soit admin)
         isGoodUser() {
             if(this.comment.userid == this.user.id) {
                 return true; 
@@ -40,6 +41,7 @@ export default {
         },        
     },
     methods: {
+        // Requête de suppression d'un commentaire
         deleteComment(id) {
             http.delete(`/post/${this.message_id}/comment/${id}`)
             .then(() => {

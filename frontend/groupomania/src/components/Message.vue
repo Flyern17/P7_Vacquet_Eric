@@ -57,6 +57,7 @@ export default {
     },
     computed: {
         ...mapState(['user']),
+        // On défini si l'utilisateur est le bon ou si il s'agit d'un administrateur
         isGoodUser() {
             if(this.item.userid == this.user.id) {
                 return true; 
@@ -67,21 +68,25 @@ export default {
             }
         },
     },
+    // On appelle une fonction refresh lorsque la page se charge
     mounted: function() {
         this.refresh()
     },
     methods: {
-
+        // On ajoute un commentaire dans un tableau, au début de celui-ci 
         addComment(data){
             this.comments.unshift(data)
         },
+        // Appel API pour voir les commentaires d'un post donné
         refresh() {
             http.get(`/post/${this.item.id}/comment/`)
                 .then(res => {
                 this.comments = res.data;
                 })      
         },
+        // Ajout d'une reaction via un appel API
         addReaction(reactionId) {
+            // Définition d'une constante payload
             const payload = {
                 userid: this.user.id,
                 postid: this.item.id,
@@ -89,16 +94,18 @@ export default {
             }
 
             console.log(payload)
+            // Envoi du payload dans la route
             http.post(`/post/${this.item.id}/reaction`, payload) 
             .then(() => {
+                // Actualise la page sans devoir recharger via Alt+R
                 this.$emit('refresh')
-            // setTimeout(() => { this.$router.push('accueil'); }, 100);
             })
             .catch(() => {
                 console.log('Impossible de poster cette reaction!');
                 alert('Impossible de poster cette reaction!');
             })
         },
+        // Suppression d'un message 
         deleteMessage() {
             http.delete(`/post/${this.item.id}`)
             .then(() => {

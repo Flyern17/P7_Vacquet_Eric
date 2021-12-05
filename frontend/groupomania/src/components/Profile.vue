@@ -38,6 +38,7 @@ export default {
         ...mapState(["user"]),
     },
     methods: {
+        // On défini le grade en fonction du grade de l'utilisateur
         userGrade() {
             if (this.member.grade > 1) {
                 return "Administrateur"

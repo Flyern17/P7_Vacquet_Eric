@@ -71,6 +71,8 @@ User.delete = (id, result) => {;
     })
 }
 
+// Modification d'un user
+
 User.update = (id, user, result) => {
     db.query("UPDATE users SET firstname = ?, lastname = ?, job = ?, birthdate = ? WHERE id = ? AND isActive=true", [user.firstname, user.lastname, user.job, user.birthdate, id], (err, res) => {
         if (err) {

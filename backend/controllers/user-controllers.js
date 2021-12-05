@@ -4,6 +4,7 @@ const User = require('../models/user');
 const userModel = require('../models/user');
 require('dotenv').config();
 
+// On défini l'enregistrement d'un utilisateur, on hash le mot de passe inscrit et on l'injecte dans la fonction
 exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
@@ -27,6 +28,7 @@ exports.signup = (req, res, next) => {
         .catch(error => res.status(500).send({ message: "Un problème est survenue." }));
 }
 
+// Utilisation de bcrypt pour comparer le hash du mot de passe enregistré dans la bdd avec le hash présent lors de la connexion de l'utilisateur
 exports.login = (req, res, next) => {
     userModel.findOneByEmail(req.body.email, (err, result) => {
         if (!result) {
@@ -55,6 +57,7 @@ exports.login = (req, res, next) => {
     })
 };
 
+// On cherche un utilisateur bien précis
 exports.getOneUser = (req, res, next) => {
     User.findOneById(req.params.id, (err, result) => {
         if (err) {
@@ -65,6 +68,7 @@ exports.getOneUser = (req, res, next) => {
     })
 }
 
+// On supprime l'utilisateur
 exports.deleteUser = (req, res, next) => {
     userModel.delete(req.params.id, (err, result) => {
         if (err) {
@@ -75,6 +79,7 @@ exports.deleteUser = (req, res, next) => {
     })
 };
 
+// On modifie les valeurs d'un utilisateur.
 exports.updateUser = (req, res, next) => {
     const newUser = new userModel({
         firstname: req.body.firstname,

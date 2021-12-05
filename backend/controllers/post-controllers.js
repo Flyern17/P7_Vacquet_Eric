@@ -11,9 +11,11 @@ exports.createPost = (req, res, next) => {
         res.status(400).send({ message: "Cette requête ne peut être vide!" });
     }
 
+    // On défini la date actuelle
     let d = new Date();
     let date = d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
 
+    // Définition d'une nouvelle constante
     const post = new postModel({
         userid: req.body.userid,
         body: req.body.body,
@@ -21,6 +23,7 @@ exports.createPost = (req, res, next) => {
         date_post: date,
     });
 
+    // On injecte la constante dans la fonction
     postModel.create(post, (err, data) => {
         if(err) {
             res.status(500).send({ message: err.message || "Une erreur a été detectée lors de la création du post" });
@@ -59,8 +62,10 @@ exports.findOnePost = (req, res, next) => {
 // Supprimer un post
 
 exports.deletePost = (req, res, next) => {
+    // On cherche l'id du message à supprimer
     postModel.findById(req.params.id, (err, data) => {
         console.log(data)
+        // Si on a une image dans la data, on supprime cette image dans le dossier /images/
         if(data.image) {
             const filename = data.image.split('/images/')[1]
             console.log(filename)
@@ -70,6 +75,7 @@ exports.deletePost = (req, res, next) => {
                 }
             })
         }
+        // On supprime le post présent à l'id inscrit
         postModel.delete(req.params.id, (err, data) => {
             if (err) {
                 if (err.kind === "not_found") {
@@ -99,9 +105,11 @@ exports.findAllReaction = (req, res) => {
 // Ajouter une reaction
 
 exports.createReaction = (req, res) => {
+    // On vérifie la requête
     if (!req.body) {
         res.status(400).send({ message: "Cette requête ne peut être vide!" });
     }
+    // On ajoute une nouvelle constante
     const newReaction = {
         userid: req.body.userid,
         postid: req.body.postid,
@@ -109,7 +117,9 @@ exports.createReaction = (req, res) => {
     };
     console.log(newReaction)
 
+    //On injecte la constante dans la fonction
     Post.findReaction(newReaction, (err, data) => {
+        // Si il n'y a pas de réaction, on ajoute une nouvelle réaction, sinon on update la réaction existante
         if (data.length == 0) {
             Post.addReaction(newReaction, (err, data) => {
                 if(err) {

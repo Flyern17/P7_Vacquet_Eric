@@ -34,6 +34,7 @@ export default {
   computed: {
     ...mapState(['user'])
   },
+  // On appelle la fonction refresh 
   mounted: function() {
     this.refresh()
   },
@@ -48,9 +49,14 @@ export default {
         for (let b in tableReaction) {
           // On regarde les réactions mises pour chaque message
           if(tableReaction[b].postid == this.messages[a].id) {
+            // Si la réaction est du type 1 (Un like)
             if (tableReaction[b].type == 1) {
+              // On ajoute au compteur des réactions likes la réaction
               this.messages[a].totalReaction_1 += tableReaction[b].sumReaction;
-            } else if (tableReaction[b].type == -1) {
+            } 
+            // Si la réaction est du type -1 (Un dislike)
+            else if (tableReaction[b].type == -1) {
+              // On ajoute au compteur des réactions dislikes la réaction
               this.messages[a].totalReaction_2 += tableReaction[b].sumReaction;
             }
           }
@@ -58,21 +64,27 @@ export default {
       }
     },
 
+    // On ajoute un post dans l'array this.messages, en premier
     addPost(data) {
       this.messages.unshift(data)
     },
-
+    
+    // Appel API sur la route d'affichage des posts et des réactions mises sur les posts
     refresh() {
       http.get('/post/')
         .then(res => {
+          // On enregistre le résultat dans la variable this.messages
           this.messages = res.data;
+          //On affiche les réactions mises 
           http.get(`/post/${this.message_id}/reaction`)
           .then(res => {
+            // On récupère les réactions postés sur les différents messages
             this.showReactionOnMessage(res.data);
           })
         })
     },
 
+    // On ajoute un commentaire dans l'array this.comments, en premier
     newComment(data){
       this.comments.unshift(data)
     }

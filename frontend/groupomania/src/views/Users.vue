@@ -50,19 +50,22 @@ export default {
     computed: {
         ...mapState(['user'])
     },
+    // On appelle la fonction refresh lors du chargement de la page
     mounted: function() {
         this.refresh()
     },
     methods: {
-
+        // Appel API au niveau de l'user avec l'id inscrit dans le payload
         refresh() {
             const payload = {
                 id: this.user.id
             }
 
+            // On injecte le payload dans la route
             console.log(payload)
             http.get(`/user/profile/${this.user.id}`, payload)
                 .then(res => {
+                    // On récupère la data du membre concernée
                     this.members = res.data;
                     console.log(this.members)
                 })
@@ -70,8 +73,9 @@ export default {
                     console.log(error)
                 })
         },
-
+        // Appel API pour modifier un utilisateur
         updateMember() {
+            // Définition d'une constante payload
             const payload = {
                 firstname: this.firstname,
                 lastname: this.lastname,
@@ -80,29 +84,33 @@ export default {
             }
 
             console.log(payload)
-
+            // On injecte le payload dans la route
             http.put(`/user/update/${this.user.id}`, payload)
                 .then(() => {
+                    // On appelle la fonction refresh pour recharger les éléments
                     this.refresh();
                 })
                 .catch(() => {
                     alert("L'utilisateur n'a pas été mis à jour!")
                 })
         },
-
+        // On défini la fonction logout qui appelera la fonction enregistrée dans le store
         logout() {
             this.$store.commit('logout');
             window.location.href='/';
         },
 
+        // On supprime l'utilisateur connecté actuellement
         deleteMember() {
-            // Modifier le modele pour la suppression d'un compte
+            // Ajout d'une constante payload qui contient l'id de l'utilisateur qui appuie sur le bouton
             const payload = {
                 id: this.user.id
             }
 
+            // On injecte le payload dans la route
             http.delete(`/user/delete/${this.user.id}`, payload)
                 .then(() => {
+                    // On appelle la fonction logout
                     console.log('logout')
                     this.logout();
                 })

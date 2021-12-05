@@ -8,12 +8,15 @@ const path = require('path');
 const postRoutes = require('./routes/post');
 const userRoutes = require('./routes/user');
 
+
+// Limitation du nombre de connexion d'un utilisateur suivant une route
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 10, // Nombre de requetes possibles pour chaque adresse IP
     message: "Nombre de requêtes dépassés, re-tentez dans 15m"
 });
 
+// Renvoie un id lors de la connexion à la bdd
 db.connect(function(err) {
     if (err) {
         console.error('error connecting: ' + err.stack);
@@ -23,11 +26,12 @@ db.connect(function(err) {
     console.log('connected as id ' + db.threadId);
 });
 
+
 const app = express();
 
 app.use(helmet());
 
-// Headers
+// Headers 
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -40,6 +44,7 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
+// Définition du chemin des images
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Routes

@@ -1,5 +1,6 @@
 const multer = require('multer');
 
+// On défini le lieu de stockage, et le nom de l'image
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
         callback(null, 'images')

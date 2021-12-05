@@ -70,25 +70,32 @@ export default{
         console.log(this.$store.state.user.id)
     },
     methods: {
+        // On switch sur le mode de création de compte
         switchToCreateAccount: function() {
             this.mode = 'create'
         },
+        // On switch sur le mode de connexion à un compte
         switchToLogin: function() {
             this.mode = 'login'
         },
         ...mapMutations(['initUser']),
 
+        // On fait un appel API pour vérifier la route de connexion
         login: function() {
+            // On enregistre un payload qui contient les informations dont on a besoin
             const payload = {
                 email: this.email,
                 password: this.password
             }
+            // On envoie ce payload dans la route
             http.post('/user/login', payload)
                 .then(res => {
+                    // On utilise la réponse dans la fonction initUser du store
                     console.log(res.data)
                     this.initUser(res.data)
+                    // On enregistre le token dans le localStorage
                     localStorage.setItem('token', res.data.token)
-                    // this.$router.push('accueil')
+                    // On renvoie vers la page d'accueil
                     setTimeout(() => { this.$router.push('accueil'); }, 100);
                 })
                 .catch(() => {
@@ -97,8 +104,9 @@ export default{
                     alert('Adresse mail ou mot de passe incorrect!')
                 })
         },
+        // On fait un appel API pour vérifier la route d'inscription
         createAccount: function() {
-
+            // On vérifie que les champs remplissent les conditions demandées
             if(this.username.length <= 5) {
                 alert('Veuillez entrer un pseudo de plus de 4 caractères!')
                 return false
@@ -111,15 +119,17 @@ export default{
                 alert('Veuillez entrer le même mot de passe!')
                 return false
             }
-
+            // On enregistre un payload qui contient les informations dont on a besoin
             const payload = {
                 email: this.email,
                 password: this.password,
                 username: this.username
             }
+            // On envoie ce payload dans la route
             http.post('/user/signup', payload)
                 .then(() => {
                     alert('Inscription reussite')
+                    // On appelle la fonction login, afin de ne pas devoir se connecter juste après
                     this.login()
                 })
                 .catch(() => {

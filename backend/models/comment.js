@@ -25,7 +25,6 @@ Comment.create = (newComment, result) => {
 
 // Trouver les différents commentaire d'un même post
 Comment.findAll = (id, result) => {
-    // "SELECT * FROM coms WHERE postid = ?"
     let request = "SELECT Coms.body, Coms.date_coms, Coms.userid, Coms.id, Coms.postid, Users.username FROM Coms JOIN Users ON Users.id = Coms.userid WHERE postid = ? ORDER BY Coms.id DESC";
     db.query(request, id, (err, res) => {
         if (err) {
@@ -47,7 +46,6 @@ Comment.delete = (id, result) => {
             result(err, null);
             return;
         } else {
-            console.log("Commentaire supprimé avec l'id: ", id);
             result(null, res);
         }
     })

@@ -42,22 +42,26 @@ export default {
         ...mapState(['user']),
     },
     methods: {
+        // Appel API pour poster un commentaire
         postComment() {
+            // On regarde si le champ est rempli, sinon on renvoie une erreur
             if(this.commentInput.trim() == '') {
                 alert('Impossible de poster un commentaire vide!')
                 return
             }
-
+            // On enregistre une constante payload 
             const payload = {
                 body: this.commentInput,
                 userid: this.user.id,
                 postid: this.message_id
             }
 
-
+            // On envoie le payload avec la route
             http.post(`/post/${this.message_id}/comment/`, payload)
                 .then(res => {
+                    // On appelle la fonction liée à "created" avec les données reçu avec la route
                     this.$emit('created', res.data)
+                    // On remet le commentInput en vide
                     this.commentInput = ''
                 })
                 .catch(() => {
