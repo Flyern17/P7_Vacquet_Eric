@@ -27,7 +27,13 @@ exports.createPost = (req, res, next) => {
     postModel.create(post, (err, data) => {
         if(err) {
             res.status(500).send({ message: err.message || "Une erreur a été detectée lors de la création du post" });
-        } else res.status(201).send(data);
+        }
+        postModel.getLatest((err, result) => {
+            if(err) {
+                return res.status(400).send({ message: "Message introuvable!" });
+            }
+            res.status(200).send(result)
+        })
     })
 };
 

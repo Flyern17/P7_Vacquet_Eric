@@ -40,7 +40,6 @@ export default {
   },
   methods: {
     showReactionOnMessage(tableReaction) {
-      console.log(tableReaction)
       for (let a in this.messages) {
         // On défini le compteur des réactions de chaque message à 0
         this.$set(this.messages[a], "totalReaction_1", 0);

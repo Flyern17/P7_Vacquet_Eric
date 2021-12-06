@@ -12,7 +12,7 @@ const userRoutes = require('./routes/user');
 // Limitation du nombre de connexion d'un utilisateur suivant une route
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 10, // Nombre de requetes possibles pour chaque adresse IP
+    max: 30, // Nombre de requetes possibles pour chaque adresse IP
     message: "Nombre de requêtes dépassés, re-tentez dans 15m"
 });
 

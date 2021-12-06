@@ -21,6 +21,21 @@ Post.create = (newPost, result) => {
     });
 };
 
+// Récupérer le dernier message
+Post.getLatest = (result) => {
+    let request = "SELECT Posts.*, Users.username AS username FROM Posts JOIN Users ON Users.id=Posts.userid ORDER BY id DESC LIMIT 0,1"
+    db.query(request, (err, res) => {
+        if(err) {
+            result(err, null);
+            return;
+        } else {
+            console.log(res[0])
+            result(null, res[0]);
+        }
+    })
+}
+
+
 // Trouver un post grâce à son ID 
 
 Post.findById = (id, result) => {
@@ -75,7 +90,6 @@ Post.findAllReactions =  (postid, result) => {
             result(err, null);
             return;
         } else {
-            console.log("Reactions trouvées:", res);
             result(null, res);
         }
     })

@@ -24,7 +24,14 @@ exports.createComment = (req, res, next) => {
     comsModel.create(comment, (err, data) => {
         if(err) {
             res.status(500).send({ message: err.message || "Une erreur a été detectée lors de la création du post" });
-        } else res.status(201).send(data);
+        }
+        comsModel.latest((err, result) => {
+            if(err) {
+                res.status(500).send({ message: "Commentaire introuvable" });
+            }
+            console.log(result)
+            res.status(200).send(result)
+        })
     })
 };
 
