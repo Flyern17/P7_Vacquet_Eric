@@ -6,9 +6,8 @@
                 <div class="col-12">
                     <a href="/#/profil" class="text-light row mx-3 font-weight-bold my-3">{{ user.username }}</a>
                     <form class="form-inline my-1">
-                        <div class="form-group col-12 flex inline-block">
-                            <label for="newMessage" class=""></label>
-                            <input v-model="body" type="newMessage" name="newMessage" placeholder="Que voulez-vous raconter aujourd'hui?" id="newMessage" class="w-100 py-1">
+                        <div class="form-group col-12 flex inline-block">       
+                            <input v-model="body" type="newMessage" name="newMessage" aria-label="Ecrivez votre texte ici" placeholder="Que voulez-vous raconter aujourd'hui?" id="newMessage" class="w-100 py-1">
                         </div>
                         <div class="form-group mx-3 my-md-3 my-sm-2">
                             <input type="file" class="" @change="uploadImage($event)" id="image-input" ref="imageInput" aria-label="Ajouter une image">

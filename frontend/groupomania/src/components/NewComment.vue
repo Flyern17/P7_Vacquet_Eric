@@ -8,8 +8,7 @@
                         <a href="/#/profil" class="text-light row mx-3 font-weight-bold mb-2 mt-1 w-10">{{ user.username }}</a>
                         <form class="form-inline my-1">
                             <div class="form-group col-12 flex inline-block">
-                                <label for="newComment" class=""></label>
-                                <input v-model="commentInput" type="newComment" name="newComment" placeholder="Ecrivez un commentaire ici!" id="newComment" class="my-0 text-dark font-weight-bold bg-white rounded py-2 col-12">
+                                <input v-model="commentInput" type="newComment" name="newComment" aria-label="Ecrivez votre commentaire ici" placeholder="Ecrivez un commentaire ici!" id="newComment" class="my-0 text-dark font-weight-bold bg-white rounded py-2 col-12">
                             </div>
                             <div class="form-group my-md-3 my-sm-2">
                                 <button type="button" aria-label="Poster un commentaire" @click.prevent="postComment" class="pull-right bg-danger rounded mx-3 py-2 border-danger text-white">Envoyer le commentaire</button>
