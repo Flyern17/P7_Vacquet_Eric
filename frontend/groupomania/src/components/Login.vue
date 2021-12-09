@@ -99,7 +99,7 @@ export default{
                     setTimeout(() => { this.$router.push('accueil'); }, 100);
                 })
                 .catch(() => {
-                    console.log('Echec de la connexion')
+                    console.log('Adresse mail ou mot de passe incorrect!')
                     localStorage.removeItem('token')
                     alert('Adresse mail ou mot de passe incorrect!')
                 })
@@ -107,8 +107,8 @@ export default{
         // On fait un appel API pour vérifier la route d'inscription
         createAccount: function() {
             // On vérifie que les champs remplissent les conditions demandées
-            if(this.username.length <= 5) {
-                alert('Veuillez entrer un pseudo de plus de 4 caractères!')
+            if(this.username.length <= 1) {
+                alert('Veuillez entrer un pseudo de plus de 1 caractère!')
                 return false
             }
             if(this.email.length <= 8) {
@@ -133,8 +133,8 @@ export default{
                     this.login()
                 })
                 .catch(() => {
-                    console.log('Echec de la connexion!');
-                    alert("Echec de la connexion!")
+                    console.log('Veuillez entrer un mot de passe sécurisé!');
+                    alert("Veuillez entrer un mot de passe sécurisé! (8 caractères minimum / 2 chiffres / 1 majuscule!")
                 })
         }
     }

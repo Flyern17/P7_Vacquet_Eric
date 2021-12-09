@@ -83,7 +83,7 @@ export default {
         })
     },
 
-    // On ajoute un commentaire dans l'array this.comments, en premier
+    // On ajoute un commentaire dans l'array this.comments, en premier (Ne sert à rien, la fonction est déjà définie sur le composant enfant)
     newComment(data){
       this.comments.unshift(data)
     }
