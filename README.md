@@ -29,4 +29,4 @@ cd frontend / npm start
 /npm run serve/
 ```
 
-# Si vous avez des soucis avec le lancement du frontend, regardez le ReadME au niveau du frontend
+Si vous avez des soucis avec le lancement du frontend, regardez le ReadME au niveau du frontend

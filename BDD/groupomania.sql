@@ -30,7 +30,7 @@ ENGINE=INNODB;
 /* Clef étrangère de la table Posts */
 
 ALTER TABLE Posts
-ADD CONSTRAINT fk_posts_userid FOREIGN KEY (userid) REFERENCES Users(id)
+ADD CONSTRAINT fk_posts_userid FOREIGN KEY (userid) REFERENCES Users(id);
 
 /* Table Coms */
 
@@ -44,13 +44,13 @@ CREATE TABLE Coms (
 )
 ENGINE=INNODB;
 
-/* Clef étrangère de la table Coms */
+/* Clefs étrangères de la table Coms */
 
 ALTER TABLE Coms
-ADD CONSTRAINT fk_coms_userid FOREIGN KEY (userid) REFERENCES Users(id)
+ADD CONSTRAINT fk_coms_userid FOREIGN KEY (userid) REFERENCES Users(id);
 
 ALTER TABLE Coms 
-ADD CONSTRAINT fk_coms_postid FOREIGN KEY (postid) REFERENCES Posts(id)
+ADD CONSTRAINT fk_coms_postid FOREIGN KEY (postid) REFERENCES Posts(id);
 
 /* Table Reaction */
 
@@ -59,12 +59,14 @@ CREATE TABLE Reaction (
     userid BIGINT UNSIGNED NOT NULL,
     postid BIGINT UNSIGNED NOT NULL,
     type BIGINT NULL,
+    PRIMARY KEY (id)
 )
+ENGINE=INNODB;
 
-/* Clef étrangère de la table Reaction */
+/* Clefs étrangères de la table Reaction */
 
-ALTER TABLE Coms
-ADD CONSTRAINT fk_reaction_userid FOREIGN KEY (userid) REFERENCES Users(id)
+ALTER TABLE Reaction
+ADD CONSTRAINT fk_reaction_userid FOREIGN KEY (userid) REFERENCES Users(id);
 
-ALTER TABLE Coms 
-ADD CONSTRAINT fk_reaction_postid FOREIGN KEY (postid) REFERENCES Posts(id)
+ALTER TABLE Reaction
+ADD CONSTRAINT fk_reaction_postid FOREIGN KEY (postid) REFERENCES Posts(id);
